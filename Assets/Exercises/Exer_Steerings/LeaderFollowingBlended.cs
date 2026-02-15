@@ -33,7 +33,7 @@ namespace Steerings
                 kp = KeepPosition...
              - if lr is zero return kp
              - else return the blending of lr and kp
-             */
+             
 
             Vector3 arbitatedAcceleration = FlockingAroundPlusAvoidance.GetLinearAcceleration(me, target);
             Vector3 keepPositionAcceleration = LinearRepulsion.GetLinearAcceleration(me,target);
