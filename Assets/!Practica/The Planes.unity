@@ -130,7 +130,8 @@ GameObject:
   - component: {fileID: 576333292}
   - component: {fileID: 576333291}
   - component: {fileID: 576333290}
-  - component: {fileID: 576333289}
+  - component: {fileID: 576333293}
+  - component: {fileID: 576333294}
   m_Layer: 0
   m_Name: Dog
   m_TagString: Untagged
@@ -138,19 +139,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &576333289
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 576333288}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6032090cd2a4d0d4bb67bf875a99b672, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Steerings.Dog
-  rotationalPolicy: 4
 --- !u!114 &576333290
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -278,6 +266,32 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &576333293
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 576333288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4b3c925e7625dd45ab17a91ddc28d5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Steerings.GoWhereYouLook
+  rotationalPolicy: 4
+--- !u!114 &576333294
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 576333288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4abd99177d782a948bf43a9fd338cedc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KBDRotate
+  angularSpeed: 180
 --- !u!1 &807870884
 GameObject:
   m_ObjectHideFlags: 0
