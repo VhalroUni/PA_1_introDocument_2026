@@ -3,7 +3,7 @@ using UnityEngine;
 namespace Steerings
 {
 
-    public class Sheep : SteeringBehaviour
+    public class FSM_Sheep : SteeringBehaviour
     {
 
         /*
@@ -16,18 +16,18 @@ namespace Steerings
         {
             return target;
         }
-        
+        */
         
         public override Vector3 GetLinearAcceleration()
         {
-            return Sheep.GetLinearAcceleration(Context /* add extra parameters (target?) if required );
+            return FSM_Sheep.GetLinearAcceleration(Context /* add extra parameters (target?) if required */);
         }
 
         
-        public static Vector3 GetLinearAcceleration (SteeringContext me /* add extra parameters (target?) if required )
+        public static Vector3 GetLinearAcceleration (SteeringContext me /* add extra parameters (target?) if required */)
         {
-            /* COMPLETE this method. It must return the linear acceleration (Vector3) 
+            /* COMPLETE this method. It must return the linear acceleration (Vector3) */
         }
-        */
+
     }
 }
