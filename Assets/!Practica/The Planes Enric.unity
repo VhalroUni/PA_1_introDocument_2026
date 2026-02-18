@@ -152,7 +152,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Steerings.SteeringContext
   maxAcceleration: 40
-  maxSpeed: 10
+  maxSpeed: 1
   clipVelocity: 1
   maxAngularAcceleration: 360
   maxAngularSpeed: 90
@@ -240,12 +240,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 3066087303227517916, guid: 276005773bd23ca4b9dce99dcfe0a781, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 276005773bd23ca4b9dce99dcfe0a781, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 3.31, y: 8.87}
+  m_Size: {x: 10, y: 10}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -278,7 +278,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4b3c925e7625dd45ab17a91ddc28d5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Steerings.GoWhereYouLook
-  rotationalPolicy: 4
+  rotationalPolicy: 1
 --- !u!114 &576333294
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -324,6 +324,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Steerings.Wolf
   rotationalPolicy: 4
+  rigidbody: {fileID: 0}
+  hasRigidbody: 0
 --- !u!114 &807870886
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -433,7 +435,7 @@ SpriteRenderer:
   m_Size: {x: 3.17, y: 8.718514}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!4 &807870888
@@ -483,6 +485,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Steerings.Sheep
   rotationalPolicy: 4
+  rigidbody: {fileID: 0}
+  hasRigidbody: 0
 --- !u!114 &1000088645
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -592,7 +596,7 @@ SpriteRenderer:
   m_Size: {x: 5.28, y: 6.3261776}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!4 &1000088647
@@ -674,7 +678,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7045057187759887182, guid: 1a50fdbc5b3e4fa4d86795db355772f4, type: 3}
+  m_Sprite: {fileID: -3412605792684949297, guid: 119c4744fc80acf41beb02e3dee6710d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -694,8 +698,8 @@ Transform:
   m_GameObject: {fileID: 1041131207}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.01, y: -0.77, z: 3.1}
-  m_LocalScale: {x: 1.1868032, y: 1.1868032, z: 1.1868032}
+  m_LocalPosition: {x: 0.0441, y: -0.5861, z: 3.1}
+  m_LocalScale: {x: 1.1593671, y: 1.1593671, z: 1.1593671}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
