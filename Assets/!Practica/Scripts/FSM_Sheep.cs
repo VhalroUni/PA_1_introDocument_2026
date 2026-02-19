@@ -2,13 +2,13 @@ using FSMs;
 using UnityEngine;
 using Steerings;
 
-[CreateAssetMenu(fileName = "FSM_Wolf", menuName = "Finite State Machines/FSM_Wolf", order = 1)]
-public class FSM_Wolf : FiniteStateMachine
+[CreateAssetMenu(fileName = "FSM_Sheep", menuName = "Finite State Machines/FSM_Sheep", order = 1)]
+public class FSM_Sheep : FiniteStateMachine
 {
     /* Declare here, as attributes, all the variables that need to be shared among
      * states and transitions and/or set in OnEnter or used in OnExit 
      * For instance: steering behaviours, blackboard, ...*/
-    private Seek seek;
+    private Flee flee;
     private WanderAround wanderAround;
 
     public override void OnEnter()
@@ -17,7 +17,7 @@ public class FSM_Wolf : FiniteStateMachine
          * It's equivalent to the on enter action of any state 
          * Usually this code includes .GetComponent<...> invocations */
         wanderAround = GetComponent<WanderAround>();
-        seek = GetComponent<Seek>();
+        flee = GetComponent<Flee>();
         
         base.OnEnter(); // do not remove
     }
@@ -35,90 +35,79 @@ public class FSM_Wolf : FiniteStateMachine
     {
         //STAGE 1: create the states with their logic(s)
         // *-----------------------------------------------
-         
-        State Escondido = new State("ESCONDIDO",
+        
+        State WanderArraund = new State("OVEJAPASTOREA",
             () => { }, // write on enter logic inside {}
             () => { }, // write in state logic inside {}
             () => { }  // write on exit logic inisde {}  
         );
-
-        State WA = new State("WANDERARAUND",
+        State Huye = new State("OVEJASEMUEVE",
             () => { }, // write on enter logic inside {}
             () => { }, // write in state logic inside {}
             () => { }  // write on exit logic inisde {}  
         );
-
-        State Perseguir = new State("PERSIGUIENDO",
+        State Meta = new State("OVEJASALVADA",
             () => { }, // write on enter logic inside {}
             () => { }, // write in state logic inside {}
             () => { }  // write on exit logic inisde {}  
         );
-
-        State Comer = new State("COMIENDO",
+        State OvejaSiendoComida = new State("LAOVEJAESTASIENDOCOMIDA",
             () => { }, // write on enter logic inside {}
             () => { }, // write in state logic inside {}
             () => { }  // write on exit logic inisde {}  
         );
-
-        State Descanso = new State("DESCANSANDO",
-            () => { }, // write on enter logic inside {}
-            () => { }, // write in state logic inside {}
-            () => { }  // write on exit logic inisde {}  
-        );
-
+        State Muerte = new State("OVEJAMUERTA",
+           () => { }, // write on enter logic inside {}
+           () => { }, // write in state logic inside {}
+           () => { }  // write on exit logic inisde {}  
+       );
 
         // STAGE 2: create the transitions with their logic(s)
-         //* ---------------------------------------------------
+        //* ---------------------------------------------------
 
-        Transition RadioZonaReached = new Transition("RadioZonaReached",
+        Transition PerroCerca = new Transition("ElPerroSeHaAcercado",
             () => { return true; }, // write the condition checkeing code in {}
             () => { }  // write the on trigger code in {} if any. Remove line if no on trigger action needed
         );
-
-        Transition OvejaDetectada = new Transition("OvejaDetectada",
+        Transition PerroLejos = new Transition("ElPerroSeHaAlejado",
             () => { return true; }, // write the condition checkeing code in {}
             () => { }  // write the on trigger code in {} if any. Remove line if no on trigger action needed
         );
-
-        Transition OvejaAlcanzada = new Transition("OveaAlcanzada",
+        Transition LlegagaAMeta = new Transition("LaOvejaSeSalva",
             () => { return true; }, // write the condition checkeing code in {}
             () => { }  // write the on trigger code in {} if any. Remove line if no on trigger action needed
         );
-
-        Transition OvejaHuye = new Transition("OvejaHuye",
+        Transition OvejaAlAcecho = new Transition("OvejaSeráAtrapada",
             () => { return true; }, // write the condition checkeing code in {}
             () => { }  // write the on trigger code in {} if any. Remove line if no on trigger action needed
         );
-
-        Transition LoboCansado = new Transition("LoboCansado",
+        Transition OvejaSalvada = new Transition("OvejaSeHaSalvado",
             () => { return true; }, // write the condition checkeing code in {}
             () => { }  // write the on trigger code in {} if any. Remove line if no on trigger action needed
         );
-
-        Transition LoboDesCansado = new Transition("LoboDesCansado",
+        Transition OvejaMuriendo = new Transition("OvejaMuriendo",
             () => { return true; }, // write the condition checkeing code in {}
             () => { }  // write the on trigger code in {} if any. Remove line if no on trigger action needed
         );
-
 
         // STAGE 3: add states and transitions to the FSM 
-         //* ----------------------------------------------
-            
-        AddStates(Escondido, WA, Perseguir, Comer, Descanso);
+        //* ----------------------------------------------
 
-        AddTransition(Escondido, RadioZonaReached, WA);
+        AddStates(WanderArraund, Huye, Meta, OvejaSiendoComida, Muerte);
 
-        AddTransition(WA, OvejaDetectada, Perseguir);
+        AddTransition(WanderArraund, PerroCerca, Huye);
+        AddTransition(Huye, PerroLejos, WanderArraund);
 
-        AddTransition(Perseguir, OvejaAlcanzada, Comer);
-        AddTransition(Perseguir, OvejaHuye, Descanso);
+        AddTransition(Huye, LlegagaAMeta, Meta);
 
-        AddTransition(Descanso, LoboDesCansado, WA);
+        AddTransition(WanderArraund, OvejaAlAcecho, OvejaSiendoComida);
+        AddTransition(OvejaSiendoComida, OvejaSalvada, WanderArraund);
 
+        AddTransition(OvejaSiendoComida, OvejaMuriendo, Muerte);
 
         // STAGE 4: set the initial state
 
-        initialState = Escondido;
+        initialState = WanderArraund;
 
          
 
