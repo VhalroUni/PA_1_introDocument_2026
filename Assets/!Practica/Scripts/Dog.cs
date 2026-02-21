@@ -7,6 +7,7 @@ namespace Steerings
     {
         public float movSpeed = 5f;
         public float rotationSpeed = 100f;
+        public float sprintMultiplier = 1.5f;
 
         private Rigidbody2D rb;
 
@@ -17,6 +18,12 @@ namespace Steerings
 
         void Update()
         {
+            bool sprint = Input.GetKey(KeyCode.LeftShift);
+            float currentSpeed = movSpeed;
+
+            if(sprint)
+                currentSpeed *= sprintMultiplier;
+
             rb.linearVelocity = transform.up * movSpeed;
 
             float rotation = 0f;
