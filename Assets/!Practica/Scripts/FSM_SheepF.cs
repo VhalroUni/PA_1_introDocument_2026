@@ -45,7 +45,7 @@ public class FSM_SheepF : FiniteStateMachine
 
 
         State wandering = new State("Wandering arround",
-            () => { wander.attractor = blackboard.centerScreen; wander.enabled = true; }, // write on enter logic inside {}
+            () => { wander.attractor = blackboard.centerScreen; context.seekWeight *= blackboard.attractorMultiplier; wander.enabled = true; }, // write on enter logic inside {}
             () => { }, // write in state logic inside {}
             () => { wander.enabled = false; }  // write on exit logic inisde {}  
         );
@@ -57,16 +57,17 @@ public class FSM_SheepF : FiniteStateMachine
         );
 
         State wolfFear = new State("Fear from wolf",
-            () => { flee.target = enemy; flee.enabled = true; context.maxSpeed *= blackboard.speedDebuff; blackboard.deathTimer = 0f; }, // write on enter logic inside {}
+            () => { blackboard.deathTimer = 0f; }, // write on enter logic inside {}
             () => { blackboard.deathTimer += Time.deltaTime; }, // write in state logic inside {}
-            () => { flee.enabled = false; context.maxSpeed = blackboard.initialSpeed; blackboard.deathTimer = 0f; }  // write on exit logic inisde {}  
+            () => { blackboard.deathTimer = 0f; }  // write on exit logic inisde {}  
         );
 
-        State stopped = new State("Stopped for fear",
-            () => { }, // write on enter logic inside {}
+        State sheepDeath = new State("Sheep is dead",
+            () => { gameObject.SetActive(false); }, // write on enter logic inside {}
             () => { }, // write in state logic inside {}
             () => { }  // write on exit logic inisde {}  
         );
+
 
 
 
@@ -74,12 +75,12 @@ public class FSM_SheepF : FiniteStateMachine
         // ---------------------------------------------------
 
         Transition dogChasing = new Transition("Dog is chasing",
-            () => { enemy = SensingUtils.FindInstanceWithinRadius(gameObject, "DOG", blackboard.someoneInRadius); return enemy != null; }, // write the condition checkeing code in {}
+            () => { enemy = SensingUtils.FindInstanceWithinRadius(gameObject, "DOG", blackboard.dogInRadius); return enemy != null; }, // write the condition checkeing code in {}
             () => { }  // write the on trigger code in {} if any. Remove line if no on trigger action needed
         );
 
         Transition wolfChasing = new Transition("Wolf is chasing",
-            () => { enemy = SensingUtils.FindInstanceWithinRadius(gameObject, "WOLF", blackboard.someoneInRadius); return enemy != null; }, // write the condition checkeing code in {}
+            () => { enemy = SensingUtils.FindInstanceWithinRadius(gameObject, "WOLF", blackboard.wolfInRadius); return enemy != null; }, // write the condition checkeing code in {}
             () => { }  // write the on trigger code in {} if any. Remove line if no on trigger action needed
         );
 
@@ -89,23 +90,22 @@ public class FSM_SheepF : FiniteStateMachine
         );
 
         Transition dogNotChasing = new Transition("Dog is not chasing",
-            () => { return SensingUtils.DistanceToTarget(gameObject, enemy) > blackboard.someoneInRadius; }, // write the condition checkeing code in {}
+            () => { return SensingUtils.DistanceToTarget(gameObject, enemy) > blackboard.dogInRadius; }, // write the condition checkeing code in {}
             () => { }  // write the on trigger code in {} if any. Remove line if no on trigger action needed
         );
-
 
 
 
         // STAGE 3: add states and transitions to the FSM 
         // ----------------------------------------------
 
-        AddStates(wandering, fleeFromDog, wolfFear, stopped);
+        AddStates(wandering, fleeFromDog, wolfFear, sheepDeath);
 
         AddTransition(wandering, dogChasing, fleeFromDog);
         AddTransition(wandering, wolfChasing, wolfFear);
         AddTransition(fleeFromDog, dogNotChasing, wandering);
         AddTransition(wolfFear, dogChasing, fleeFromDog);
-        AddTransition(wolfFear, wolfCanEat, stopped);
+        AddTransition(wolfFear, wolfCanEat, sheepDeath);
 
 
 
