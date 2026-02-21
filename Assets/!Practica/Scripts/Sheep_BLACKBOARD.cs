@@ -10,7 +10,7 @@ public class Sheep_BLACKBOARD : MonoBehaviour
     public float closeEnoughRadius = 0.5f;
     public float safeZoneRadius = 5f;
     public float dogInRadius = 10f;
-    public float wolfInRadius = 5f;
+    public float wolfInRadius = 1f;
 
     public float attractorMultiplier = 3f;
 
