@@ -99,7 +99,7 @@ public class FSM_SheepF : FiniteStateMachine
         // STAGE 3: add states and transitions to the FSM 
         // ----------------------------------------------
 
-        AddStates(wandering, fleeFromDog, wolfFear);
+        AddStates(wandering, fleeFromDog, wolfFear, stopped);
 
         AddTransition(wandering, dogChasing, fleeFromDog);
         AddTransition(wandering, wolfChasing, wolfFear);

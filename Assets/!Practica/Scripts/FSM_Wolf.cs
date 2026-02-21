@@ -2,6 +2,7 @@ using FSMs;
 using Steerings;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 [CreateAssetMenu(fileName = "FSM_Wolf", menuName = "Finite State Machines/FSM_Wolf", order = 1)]
 public class FSM_Wolf : FiniteStateMachine
@@ -23,9 +24,11 @@ public class FSM_Wolf : FiniteStateMachine
         /* Write here the FSM initialization code. This code is execute every time the FSM is entered.
          * It's equivalent to the on enter action of any state 
          * Usually this code includes .GetComponent<...> invocations */
-        wander = GetComponent<WanderAround>();
-        seek = GetComponent<Seek>();
-        
+        wander = gameObject.GetComponent<WanderAround>();
+        blackboard = gameObject.GetComponent<Wolf_BLACKBOARD>();
+        seek = gameObject.GetComponent<Seek>();
+        pursue = gameObject.GetComponent<Pursue>();
+
         base.OnEnter(); // do not remove
     }
 
@@ -44,7 +47,7 @@ public class FSM_Wolf : FiniteStateMachine
         // *-----------------------------------------------
          
         State Hide = new State("HIDE",
-            () => { }, // write on enter logic inside {}
+            () => { SensingUtils.FindInstanceWithinRadius(gameObject, "SHEEP", 10); }, // write on enter logic inside {}
             () => { }, // write in state logic inside {}
             () => { }  // write on exit logic inisde {}  
         );

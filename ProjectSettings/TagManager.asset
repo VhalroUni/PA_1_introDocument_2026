@@ -20,6 +20,17 @@ TagManager:
   - CHICK
   - DOG
   - WOLF
+  - BOX
+  - BATCAT
+  - TRASH_CAN
+  - COHESIVE
+  - PREDATOR
+  - HEN
+  - BEER
+  - BUBBLE
+  - TRASH
+  - MONEY
+  - SHEEP
   layers:
   - Default
   - TransparentFX
