@@ -1,6 +1,7 @@
 using FSMs;
-using UnityEngine;
 using Steerings;
+using UnityEditor.Experimental.GraphView;
+using UnityEngine;
 
 [CreateAssetMenu(fileName = "FSM_Wolf", menuName = "Finite State Machines/FSM_Wolf", order = 1)]
 public class FSM_Wolf : FiniteStateMachine
@@ -8,15 +9,21 @@ public class FSM_Wolf : FiniteStateMachine
     /* Declare here, as attributes, all the variables that need to be shared among
      * states and transitions and/or set in OnEnter or used in OnExit 
      * For instance: steering behaviours, blackboard, ...*/
+    private GameObject sheep;
+    private Wolf_BLACKBOARD blackboard;
     private Seek seek;
-    private WanderAround wanderAround;
+    private Pursue pursue;
+    private WanderAround wander;
+    private float pursuingTime;
+    private float restingTime;
+    private float elapsedTime;
 
     public override void OnEnter()
     {
         /* Write here the FSM initialization code. This code is execute every time the FSM is entered.
          * It's equivalent to the on enter action of any state 
          * Usually this code includes .GetComponent<...> invocations */
-        wanderAround = GetComponent<WanderAround>();
+        wander = GetComponent<WanderAround>();
         seek = GetComponent<Seek>();
         
         base.OnEnter(); // do not remove
@@ -36,33 +43,33 @@ public class FSM_Wolf : FiniteStateMachine
         //STAGE 1: create the states with their logic(s)
         // *-----------------------------------------------
          
-        State Escondido = new State("ESCONDIDO",
+        State Hide = new State("HIDE",
             () => { }, // write on enter logic inside {}
             () => { }, // write in state logic inside {}
             () => { }  // write on exit logic inisde {}  
         );
 
-        State WA = new State("WANDERARAUND",
-            () => { }, // write on enter logic inside {}
+        State WanderAround = new State("WANDERAROUND",
+            () => { wander.attractor = blackboard.attractor; wander.enabled = true; }, // write on enter logic inside {}
             () => { }, // write in state logic inside {}
-            () => { }  // write on exit logic inisde {}  
+            () => { wander.enabled = false; }  // write on exit logic inisde {}  
         );
 
-        State Perseguir = new State("PERSIGUIENDO",
-            () => { }, // write on enter logic inside {}
-            () => { }, // write in state logic inside {}
-            () => { }  // write on exit logic inisde {}  
+        State Chase = new State("CHASING",
+            () => { pursuingTime = 0; pursue.target = sheep; pursue.enabled = true; }, // write on enter logic inside {}
+            () => { pursuingTime += Time.deltaTime; }, // write in state logic inside {}
+            () => { pursue.enabled = false; }  // write on exit logic inisde {}  
         );
 
-        State Comer = new State("COMIENDO",
-            () => { }, // write on enter logic inside {}
-            () => { }, // write in state logic inside {}
-            () => { }  // write on exit logic inisde {}  
+        State Eat = new State("EATING",
+            () => { elapsedTime = 0; }, // write on enter logic inside {}
+            () => { elapsedTime += Time.deltaTime; }, // write in state logic inside {}
+            () => { Destroy(sheep); }  // write on exit logic inisde {}  
         );
 
-        State Descanso = new State("DESCANSANDO",
-            () => { }, // write on enter logic inside {}
-            () => { }, // write in state logic inside {}
+        State Rest = new State("RESTING",
+            () => { restingTime = 0; }, // write on enter logic inside {}
+            () => { restingTime += Time.deltaTime; }, // write in state logic inside {}
             () => { }  // write on exit logic inisde {}  
         );
 
@@ -70,32 +77,31 @@ public class FSM_Wolf : FiniteStateMachine
         // STAGE 2: create the transitions with their logic(s)
          //* ---------------------------------------------------
 
-        Transition RadioZonaReached = new Transition("RadioZonaReached",
+        Transition ZoneRadiusReached = new Transition("ZoneRadiusReached",
             () => { return true; }, // write the condition checkeing code in {}
             () => { }  // write the on trigger code in {} if any. Remove line if no on trigger action needed
         );
 
-        Transition OvejaDetectada = new Transition("OvejaDetectada",
+        Transition SheepDetected = new Transition("SheepDetected",
+            () => {sheep = SensingUtils.FindInstanceWithinRadius(gameObject, "SHEEP", blackboard.sheepDetectableRaidus);
+                return sheep != null;
+            }, // write the condition checkeing code in {}
+            () => { }  // write the on trigger code in {} if any. Remove line if no on trigger action needed
+        );
+
+        Transition SheepReached = new Transition("SheepReached",
+            () => {
+                return SensingUtils.FindInstanceWithinRadius(gameObject, "SHEEP", blackboard.sheepReachedRadius);
+            }, // write the condition checkeing code in {}
+            () => { }  // write the on trigger code in {} if any. Remove line if no on trigger action needed
+        );
+
+        Transition SheepFlee = new Transition("SheepFlee",
             () => { return true; }, // write the condition checkeing code in {}
             () => { }  // write the on trigger code in {} if any. Remove line if no on trigger action needed
         );
 
-        Transition OvejaAlcanzada = new Transition("OveaAlcanzada",
-            () => { return true; }, // write the condition checkeing code in {}
-            () => { }  // write the on trigger code in {} if any. Remove line if no on trigger action needed
-        );
-
-        Transition OvejaHuye = new Transition("OvejaHuye",
-            () => { return true; }, // write the condition checkeing code in {}
-            () => { }  // write the on trigger code in {} if any. Remove line if no on trigger action needed
-        );
-
-        Transition LoboCansado = new Transition("LoboCansado",
-            () => { return true; }, // write the condition checkeing code in {}
-            () => { }  // write the on trigger code in {} if any. Remove line if no on trigger action needed
-        );
-
-        Transition LoboDesCansado = new Transition("LoboDesCansado",
+        Transition WolfResting = new Transition("WolfResting",
             () => { return true; }, // write the condition checkeing code in {}
             () => { }  // write the on trigger code in {} if any. Remove line if no on trigger action needed
         );
@@ -104,23 +110,17 @@ public class FSM_Wolf : FiniteStateMachine
         // STAGE 3: add states and transitions to the FSM 
          //* ----------------------------------------------
             
-        AddStates(Escondido, WA, Perseguir, Comer, Descanso);
+        AddStates(Hide, WanderAround, Chase, Eat, Rest);
 
-        AddTransition(Escondido, RadioZonaReached, WA);
-
-        AddTransition(WA, OvejaDetectada, Perseguir);
-
-        AddTransition(Perseguir, OvejaAlcanzada, Comer);
-        AddTransition(Perseguir, OvejaHuye, Descanso);
-
-        AddTransition(Descanso, LoboDesCansado, WA);
+        AddTransition(Hide, ZoneRadiusReached, WanderAround);
+        AddTransition(WanderAround, SheepDetected, Chase);
+        AddTransition(Chase, SheepReached, Eat);
+        AddTransition(Chase, SheepFlee, Rest);
+        AddTransition(Rest, WolfResting, WanderAround);   
 
 
         // STAGE 4: set the initial state
 
-        initialState = Escondido;
-
-         
-
+        initialState = Hide;
     }
 }
